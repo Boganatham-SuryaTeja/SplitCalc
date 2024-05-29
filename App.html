@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amount Calculator</title>
+    <style>
+        .highlight {
+    background-color: #ffffcc; /* Highlight color for final amount */
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .input-row {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-row div {
+            flex: 1;
+            padding: 5px;
+        }
+
+        .input-row input[type="text"], .input-row input[type="number"], #totalAmount, #taxPercentage, #tipPercentage {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1;
+        }
+
+        .add-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
+        }
+
+        #total {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Amount Calculator</h2>
+    <div id="inputFields">
+        <div class="input-row">
+            <div>Name</div>
+            <div>Food Amount</div>
+            <div>Final Amount</div>
+        </div>
+        <div class="input-row">
+            <input type="text" class="highlight name" placeholder="Name" required>
+            <input type="text" class="name" placeholder="Food Item" required>
+            <input type="number" class="amount food-amount-1" placeholder="Food Amount" required>
+            <input type="number" class="amount highlight final-amount-1" placeholder="Final Amount" readonly>
+        </div>
+    </div>
+    <button class="add-button" onclick="addInputField()">+</button>
+    <button class="add-button" onclick="calculateTotal()">Calculate</button>
+    <div id="total"></div>
+    <div class="input-row">
+        <input type="number" id="taxPercentage" placeholder="Tax Percentage">
+        <input type="number" id="tipPercentage" placeholder="Tip Percentage">
+    </div>
+</div>
+
+<script>
+    var inputCount = 1;
+
+    function addInputField() {
+        var inputFieldsDiv = document.getElementById("inputFields");
+        // var inputRow = document.createElement("div");
+        // inputRow.className = "input-row";
+        // inputRow.innerHTML = '<div>Name</div> <div>Food Amount</div> <div>Final Amount</div>';
+        // inputFieldsDiv.appendChild(inputRow);
+
+        var newRow = document.createElement("div");
+        newRow.className = "input-row";
+        inputCount++;
+        newRow.innerHTML = '<input type="text" class="highlight name" placeholder="Name" required><input type="text" class="name" placeholder="Food Item" required> <input type="number" class="amount food-amount-' + inputCount + '" placeholder="Food Amount" required> <input type="number" class="amount highlight final-amount-' + inputCount + '" placeholder="Final Amount" readonly>';
+        inputFieldsDiv.appendChild(newRow);
+    }
+
+    function calculateTotal() {
+        var inputRows = document.querySelectorAll(".input-row");
+        var totalAmount = 0;
+
+        inputRows.forEach(function(row) {
+            var foodAmount = parseFloat(document.querySelector('.food-amount-' + inputCount).value);
+            var tipPercentage = parseFloat(document.getElementById("tipPercentage").value) || 0;
+            var taxPercentage = parseFloat(document.getElementById("taxPercentage").value) || 0;
+
+            var tipAmount = foodAmount * (tipPercentage / 100);
+            var taxAmount = foodAmount * (taxPercentage / 100);
+
+            var finalAmount = foodAmount + tipAmount + taxAmount;
+
+            document.querySelector('.final-amount-' + inputCount).value = finalAmount;
+
+            totalAmount += finalAmount;
+        });
+
+        //var totalDiv = document.getElementById("total");
+        //totalDiv.innerHTML = "Total amount: $" + totalAmount.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
